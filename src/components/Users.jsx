@@ -52,7 +52,7 @@ const Users = () => {
                 <td>{user.rate}/5</td>
                 <td>
                   <button
-                    className='badge bg-danger'
+                    className='btn btn-danger'
                     onClick={() => handleDelete(user._id)}
                   >
                     delete
