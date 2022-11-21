@@ -17,9 +17,9 @@ const Users = (props) => {
           </thead>
           <tbody>
             {props.users.map((user) => (
-              <tr>
+              <tr key={user._id}>
                 <User
-                  key={user._id}
+                  // key={user._id}
                   {...user}
                   onDelete={props.onHandleDelete}
                   onToggleBookmark={props.onToggleBookmark}

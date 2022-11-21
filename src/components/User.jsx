@@ -7,9 +7,7 @@ const User = (props) => {
     <>
       <td>{props.name}</td>
       <td>
-        {props.qualities.map((quality) => (
-          <Qualitie key={quality._id} {...quality} />
-        ))}
+        <Qualitie user={props} />
       </td>
       <td>{props.profession.name}</td>
       <td>{props.completedMeetings}</td>

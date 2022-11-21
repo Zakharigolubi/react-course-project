@@ -7,7 +7,11 @@ const App = () => {
   const [users, setUsers] = useState(api.users.fetchAll())
 
   const handleDelete = (userId) => {
-    setUsers((prevState) => prevState.filter((el) => el._id !== userId))
+    setUsers((prevState) =>
+      prevState.filter((user) => {
+        return user._id !== userId
+      })
+    )
   }
   const handleToggleBookmark = (userId) => {
     const favUsers = users.map((user) => {

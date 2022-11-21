@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Bookmark = (props) => {
-  console.log(props)
   return (
     <button
       className='btn btn-outline-dark'
