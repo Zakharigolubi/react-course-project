@@ -1,6 +1,6 @@
-import React from 'react'
-import Qualitie from './Qualitie'
-import Bookmark from './Bookmark'
+import React from "react";
+import Qualitie from "./Qualitie";
+import Bookmark from "./Bookmark";
 
 const User = (props) => {
   return (
@@ -21,14 +21,14 @@ const User = (props) => {
       </td>
       <td>
         <button
-          className='btn btn-danger'
+          className="btn btn-danger"
           onClick={() => props.onDelete(props._id)}
         >
           delete
         </button>
       </td>
     </>
-  )
-}
+  );
+};
 
-export default User
+export default User;
