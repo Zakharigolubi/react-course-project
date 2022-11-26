@@ -1,30 +1,30 @@
-import React, { useState } from "react";
-import { paginate } from "../utils/paginate";
-import Pagination from "./Pagination";
-import User from "./User";
+import React, { useState } from 'react'
+import { paginate } from '../utils/paginate'
+import Pagination from './Pagination'
+import User from './User'
+import PropTypes from 'prop-types'
 
 const Users = (props) => {
-  const count = props.users.length;
-  const pageSize = 4;
-  const [currentPage, setCurrentPage] = useState(1);
+  const count = props.users.length
+  const pageSize = 4
+  const [currentPage, setCurrentPage] = useState(1)
   const handlePageChange = (pageIndex) => {
-    setCurrentPage(pageIndex);
-  };
+    setCurrentPage(pageIndex)
+  }
 
-  const userCrop = paginate(props.users, currentPage, pageSize);
-  console.log(userCrop);
+  const userCrop = paginate(props.users, currentPage, pageSize)
 
   return (
     <>
       {count > 0 && (
-        <table className="table table-hover">
+        <table className='table table-hover'>
           <thead>
             <tr>
-              <th scope="col">Имя</th>
-              <th scope="col">Качества</th>
-              <th scope="col">Профессия</th>
-              <th scope="col">Встретился, раз</th>
-              <th scope="col">Оценка</th>
+              <th scope='col'>Имя</th>
+              <th scope='col'>Качества</th>
+              <th scope='col'>Профессия</th>
+              <th scope='col'>Встретился, раз</th>
+              <th scope='col'>Оценка</th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +47,11 @@ const Users = (props) => {
         onPageChange={handlePageChange}
       />
     </>
-  );
-};
-export default Users;
+  )
+}
+Users.propTypes = {
+  users: PropTypes.array.isRequired,
+  onHandleDelete: PropTypes.func.isRequired,
+  onToggleBookmark: PropTypes.func.isRequired
+}
+export default Users
