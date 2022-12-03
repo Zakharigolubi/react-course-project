@@ -12,7 +12,10 @@ module.exports = {
   plugins: ['react', 'prettier'],
   rules: {
     semi: ['error', 'never'],
-    'space-before-function-paren': ['error', 'never'],
+    'space-before-function-paren': [
+      'error',
+      { anonymous: 'always', named: 'never' }
+    ],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     'comma-dangle': ['error', 'never'],
     'multiline-ternary': ['error', 'never']
