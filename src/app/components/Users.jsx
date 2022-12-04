@@ -61,7 +61,7 @@ const Users = (props) => {
 
       <div className='d-flex flex-column'>
         {loading ? (
-          <div className='d-flex justify-content-end'>
+          <div className='d-flex'>
             <h6>Loading...</h6>
             <div className='spinner-border text-primary' role='status'></div>
           </div>
