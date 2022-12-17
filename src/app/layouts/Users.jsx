@@ -1,13 +1,16 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { paginate } from '../utils/paginate'
-import Pagination from './Pagination'
+import Pagination from '../components/Pagination'
 import PropTypes from 'prop-types'
-import GroupList from './GroupList'
+import GroupList from '../components/GroupList'
 import api from '../api'
-import SearchStatus from './SearchStatus'
+import SearchStatus from '../components/SearchStatus'
 import _ from 'lodash'
-import UsersTable from './UsersTable'
+import UsersTable from '../components/UsersTable'
+import { useParams } from 'react-router-dom'
+import UserPage from '../components/UserPage'
+import Spinner from '../components/Spinner'
 
 const Users = () => {
   const [currentPage, setCurrentPage] = useState(1)
@@ -75,6 +78,11 @@ const Users = () => {
     setSelectedProf()
   }
 
+  const params = useParams()
+  const { userId } = params
+  if (userId) {
+    return <UserPage id={userId} />
+  }
   return (
     <div className='d-flex'>
       {professions && (
@@ -91,14 +99,7 @@ const Users = () => {
       )}
 
       <div className='d-flex flex-column'>
-        {loading ? (
-          <div className='d-flex'>
-            <h6>Loading...</h6>
-            <div className='spinner-border text-primary' role='status'></div>
-          </div>
-        ) : (
-          <SearchStatus users={filteredUsers} />
-        )}
+        {loading ? <Spinner /> : <SearchStatus users={filteredUsers} />}
 
         {count > 0 && (
           <UsersTable
