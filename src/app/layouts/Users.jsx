@@ -11,6 +11,7 @@ import UsersTable from '../components/UsersTable'
 import { useParams } from 'react-router-dom'
 import UserPage from '../components/UserPage'
 import Spinner from '../components/Spinner'
+import Search from '../components/Search'
 
 const Users = () => {
   const [currentPage, setCurrentPage] = useState(1)
@@ -18,6 +19,7 @@ const Users = () => {
   const [selectedProf, setSelectedProf] = useState()
   const [loading, setLoading] = useState(true)
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
+  const [search, setSearch] = useState('')
 
   const pageSize = 8
 
@@ -64,8 +66,18 @@ const Users = () => {
     setSortBy(item)
   }
 
+  const handleSearch = (event) => {
+    event.preventDefault()
+    setSelectedProf()
+    setSearch(event.target.value)
+  }
+
   const filteredUsers = selectedProf
     ? users.filter((user) => _.isEqual(user.profession, selectedProf))
+    : search
+    ? users.filter((user) =>
+        user.name.toLowerCase().includes(search.toLowerCase())
+      )
     : users
 
   const count = filteredUsers.length
@@ -99,7 +111,14 @@ const Users = () => {
       )}
 
       <div className='d-flex flex-column'>
-        {loading ? <Spinner /> : <SearchStatus users={filteredUsers} />}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <SearchStatus users={filteredUsers} />{' '}
+            <Search value={search} onChange={handleSearch} />
+          </>
+        )}
 
         {count > 0 && (
           <UsersTable
