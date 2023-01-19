@@ -18,6 +18,6 @@ module.exports = {
     ],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     'comma-dangle': ['error', 'never'],
-    'multiline-ternary': ['error', 'never']
+    'multiline-ternary': ['off']
   }
 }

@@ -12,7 +12,7 @@ const qualities = {
   },
   buller: {
     _id: '67rdca3eeb7f6fgeed4711012',
-    name: 'Тролль',
+    name: 'Троль',
     color: 'success'
   },
   alcoholic: {
@@ -151,12 +151,11 @@ const fetchAll = () =>
   })
 
 const getById = (id) =>
-  new Promise((resolve) =>
+  new Promise((resolve) => {
     window.setTimeout(function () {
       resolve(users.find((user) => user._id === id))
     }, 1000)
-  )
-
+  })
 export default {
   fetchAll,
   getById

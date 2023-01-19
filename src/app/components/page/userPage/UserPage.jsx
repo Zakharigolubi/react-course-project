@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
-import api from '../api'
-import QualitiesList from './QualitiesList'
-import Spinner from './Spinner'
+import api from '../../../../api'
+import Qualities from '../../ui/qualities/Qualities'
+import Spinner from '../../common/Spinner'
 
 const UserPage = ({ id }) => {
   const [user, setUser] = useState()
@@ -24,7 +24,7 @@ const UserPage = ({ id }) => {
           <h1>{user.name}</h1>
           <h3>Профессия: {user.profession.name}</h3>
           <p>
-            <QualitiesList qualities={user.qualities} />
+            <Qualities qualities={user.qualities} />
           </p>
           <p>Встретился, раз: {user.completedMeetings}</p>
           <h3>Рейтинг: {user.rate}</h3>
