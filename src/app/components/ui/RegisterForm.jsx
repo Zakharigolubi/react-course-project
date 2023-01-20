@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { validator } from '../../utils/validator'
 import TextField from '../common/form/TextField'
-import api from '../../../api'
+import api from '../../api'
 import SelectField from '../common/form/SelectField'
 import RadioField from '../common/form/RadioField'
 import MultiSelectField from '../common/form/MultiSelectField'
+import CheckBoxField from '../common/form/CheckBoxField'
 
 const RegisterForm = () => {
   const [data, setData] = useState({
@@ -12,7 +13,8 @@ const RegisterForm = () => {
     password: '',
     profession: '',
     sex: 'male',
-    qualities: []
+    qualities: [],
+    licence: false
   })
   const [qualities, setQualities] = useState({})
   const [professions, setProfession] = useState()
@@ -48,6 +50,12 @@ const RegisterForm = () => {
     profession: {
       isRequired: {
         message: 'Обязательно выберите Вашу профессию'
+      }
+    },
+    licence: {
+      isRequired: {
+        message:
+          'Вы не можете использовать наш сервис без подтверждения лицензионного соглашения'
       }
     }
   }
@@ -109,7 +117,6 @@ const RegisterForm = () => {
         onChange={handleChange}
         label='Выберите ваш пол'
       />
-
       <MultiSelectField
         options={qualities}
         onChange={handleChange}
@@ -117,6 +124,15 @@ const RegisterForm = () => {
         name='qualities'
         label='Выберите ваши качества'
       />
+
+      <CheckBoxField
+        value={data.licence}
+        onChange={handleChange}
+        name='licence'
+        error={errors.licence}
+      >
+        Подтвердить <a>лицензионное соглашение</a>
+      </CheckBoxField>
 
       <button
         type='submit'

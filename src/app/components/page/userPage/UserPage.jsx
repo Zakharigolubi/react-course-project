@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
-import api from '../../../../api'
+import api from '../../../api'
 import Qualities from '../../ui/qualities/Qualities'
 import Spinner from '../../common/Spinner'
 
