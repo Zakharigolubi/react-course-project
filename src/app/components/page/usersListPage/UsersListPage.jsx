@@ -20,7 +20,6 @@ const UsersListPage = () => {
   const [loading, setLoading] = useState(true)
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
   const [search, setSearch] = useState('')
-
   const pageSize = 8
 
   const [users, setUsers] = useState([])
@@ -30,11 +29,7 @@ const UsersListPage = () => {
   }, [])
 
   const handleDelete = (userId) => {
-    setUsers((prevState) =>
-      prevState.filter((user) => {
-        return user._id !== userId
-      })
-    )
+    setUsers(users.filter((user) => user._id !== userId))
   }
 
   const handleToggleBookmark = (userId) => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import Users from './layouts/Users'
 import Navbar from '../app/components/ui/Navbar'
 import Main from './layouts/Main'
@@ -13,6 +13,7 @@ const App = () => {
         <Route path='/' exact component={Main} />
         <Route path='/login' component={Login} />
         <Route path='/users/:userId?' component={Users} />
+        <Redirect to='/' />
       </Switch>
     </>
   )

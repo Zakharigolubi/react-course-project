@@ -5,14 +5,15 @@ import api from '../../../api'
 import Qualities from '../../ui/qualities/Qualities'
 import Spinner from '../../common/Spinner'
 
-const UserPage = ({ id }) => {
+const UserPage = ({ userId }) => {
+  const history = useHistory()
   const [user, setUser] = useState()
   useEffect(() => {
-    api.users.getById(id).then((user) => {
-      setUser(user)
+    api.users.getById(userId).then((data) => {
+      setUser(data)
     })
   }, [])
-  const history = useHistory()
+
   const allUsers = () => {
     history.push('/users')
   }
@@ -29,13 +30,7 @@ const UserPage = ({ id }) => {
           <p>Встретился, раз: {user.completedMeetings}</p>
           <h3>Рейтинг: {user.rate}</h3>
 
-          <button
-            onClick={() => {
-              allUsers()
-            }}
-          >
-            Все пользователи
-          </button>
+          <button onClick={allUsers}>Все пользователи</button>
         </>
       ) : (
         <Spinner />
@@ -44,6 +39,6 @@ const UserPage = ({ id }) => {
   )
 }
 UserPage.propTypes = {
-  id: PropTypes.string
+  userId: PropTypes.string
 }
 export default UserPage
