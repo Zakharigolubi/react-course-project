@@ -14,12 +14,12 @@ const UserPage = ({ userId }) => {
     })
   }, [])
 
-  const allUsers = () => {
-    history.push('/users')
+  const changeUrl = () => {
+    history.push(`${history.location.pathname}/edit`)
   }
-  console.log(user)
+
   return (
-    <>
+    <div className='flex-box'>
       {user ? (
         <>
           <h1>{user.name}</h1>
@@ -30,12 +30,14 @@ const UserPage = ({ userId }) => {
           <p>Встретился, раз: {user.completedMeetings}</p>
           <h3>Рейтинг: {user.rate}</h3>
 
-          <button onClick={allUsers}>Все пользователи</button>
+          <button className='btn btn-outline-secondary' onClick={changeUrl}>
+            Изменить параметры пользователя
+          </button>
         </>
       ) : (
         <Spinner />
       )}
-    </>
+    </div>
   )
 }
 UserPage.propTypes = {

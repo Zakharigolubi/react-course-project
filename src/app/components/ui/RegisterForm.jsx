@@ -16,19 +16,56 @@ const RegisterForm = () => {
     qualities: [],
     licence: false
   })
-  const [qualities, setQualities] = useState({})
-  const [professions, setProfession] = useState()
+  const [qualities, setQualities] = useState([])
+  const [professions, setProfession] = useState([])
   const [errors, setErrors] = useState({})
 
-  useEffect(() => {
-    api.professions.fetchAll().then((data) => setProfession(data))
-    api.qualities.fetchAll().then((data) => setQualities(data))
-  }, [])
-
-  const handleChange = (target) => {
-    setData((prevState) => ({ ...prevState, [target.name]: target.value }))
+  const getProfessionById = (id) => {
+    for (const prof of professions) {
+      if (prof.value === id) {
+        return { _id: prof.value, name: prof.label }
+      }
+    }
+  }
+  const getQualities = (elements) => {
+    const qualitiesArray = []
+    for (const elem of elements) {
+      for (const quality in qualities) {
+        if (elem.value === qualities[quality].value) {
+          qualitiesArray.push({
+            _id: qualities[quality].value,
+            name: qualities[quality].label,
+            color: qualities[quality].color
+          })
+        }
+      }
+    }
+    return qualitiesArray
   }
 
+  useEffect(() => {
+    api.professions.fetchAll().then((data) => {
+      const professionsList = Object.keys(data).map((professionName) => ({
+        label: data[professionName].name,
+        value: data[professionName]._id
+      }))
+      setProfession(professionsList)
+    })
+    api.qualities.fetchAll().then((data) => {
+      const qualitiesList = Object.keys(data).map((optionName) => ({
+        value: data[optionName]._id,
+        label: data[optionName].name,
+        color: data[optionName].color
+      }))
+      setQualities(qualitiesList)
+    })
+  }, [])
+  const handleChange = (target) => {
+    setData((prevState) => ({
+      ...prevState,
+      [target.name]: target.value
+    }))
+  }
   const validatorConfig = {
     email: {
       isRequired: { message: 'Электронная почта обязательна для заполнения' },
@@ -63,23 +100,24 @@ const RegisterForm = () => {
   useEffect(() => {
     validate()
   }, [data])
-
   const validate = () => {
     const errors = validator(data, validatorConfig)
     setErrors(errors)
     return Object.keys(errors).length === 0
   }
-
   const isValid = Object.keys(errors).length === 0
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const isValid = validate()
     if (!isValid) return
-
-    console.log(data)
+    const { profession, qualities } = data
+    console.log({
+      ...data,
+      profession: getProfessionById(profession),
+      qualities: getQualities(qualities)
+    })
   }
-
   return (
     <form onSubmit={handleSubmit}>
       <TextField
@@ -98,10 +136,10 @@ const RegisterForm = () => {
         error={errors.password}
       />
       <SelectField
-        label='Выберите вашу профессию'
+        label='Выбери свою профессию'
         defaultOption='Choose...'
-        name='profession'
         options={professions}
+        name='profession'
         onChange={handleChange}
         value={data.profession}
         error={errors.profession}
@@ -124,7 +162,6 @@ const RegisterForm = () => {
         name='qualities'
         label='Выберите ваши качества'
       />
-
       <CheckBoxField
         value={data.licence}
         onChange={handleChange}
@@ -133,11 +170,10 @@ const RegisterForm = () => {
       >
         Подтвердить <a>лицензионное соглашение</a>
       </CheckBoxField>
-
       <button
+        className='btn btn-primary w-100 mx-auto'
         type='submit'
         disabled={!isValid}
-        className='btn btn-primary w-100 mx-auto'
       >
         Submit
       </button>
