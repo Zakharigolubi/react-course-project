@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Bookmark from '../common/Bookmark'
-import Qualities from './qualities/Qualities'
+import QualitiesList from './qualities'
 import Table from '../common/table/Table'
 import { Link } from 'react-router-dom'
 
@@ -24,7 +24,7 @@ const UsersTable = ({
     },
     qualities: {
       name: 'Качества',
-      component: (user) => <Qualities qualities={user.qualities} />
+      component: (user) => <QualitiesList qualities={user.qualities} />
     },
     professions: { path: 'profession.name', name: 'Профессия' },
     completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },

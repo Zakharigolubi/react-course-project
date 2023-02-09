@@ -5,6 +5,7 @@ import TextField from '../../common/form/TextField'
 import SelectField from '../../common/form/SelectField'
 import RadioField from '../../common/form/RadioField'
 import MultiSelectField from '../../common/form/MultiSelectField'
+import BackHistoryButton from '../../common/BackHistoryButton'
 import Spinner from '../../common/Spinner'
 
 const EditUserPage = () => {
@@ -82,6 +83,7 @@ const EditUserPage = () => {
 
   return user ? (
     <div className='container mt-5'>
+      <BackHistoryButton />
       <div className='row'>
         <div className='col-md-6 offset-md-3 shadow p-4'>
           <form onSubmit={handleSubmit}>

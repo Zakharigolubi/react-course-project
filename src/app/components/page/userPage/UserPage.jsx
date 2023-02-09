@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useHistory } from 'react-router-dom'
 import api from '../../../api'
-import Qualities from '../../ui/qualities/Qualities'
 import Spinner from '../../common/Spinner'
+import UserCard from '../../ui/UserCard'
+import QualitiesCard from '../../ui/QualitiesCard'
+import MeetingsCard from '../../ui/MeetingsCard'
+import Comments from '../../ui/Comments'
 
 const UserPage = ({ userId }) => {
-  const history = useHistory()
   const [user, setUser] = useState()
   useEffect(() => {
     api.users.getById(userId).then((data) => {
@@ -14,26 +15,19 @@ const UserPage = ({ userId }) => {
     })
   }, [])
 
-  const changeUrl = () => {
-    history.push(`${history.location.pathname}/edit`)
-  }
-
   return (
-    <div className='flex-box'>
+    <div className='container'>
       {user ? (
-        <>
-          <h1>{user.name}</h1>
-          <h3>Профессия: {user.profession.name}</h3>
-          <p>
-            <Qualities qualities={user.qualities} />
-          </p>
-          <p>Встретился, раз: {user.completedMeetings}</p>
-          <h3>Рейтинг: {user.rate}</h3>
-
-          <button className='btn btn-outline-secondary' onClick={changeUrl}>
-            Изменить параметры пользователя
-          </button>
-        </>
+        <div className='row gutters-sm'>
+          <div className='col-md-4 mb-3'>
+            <UserCard user={user} />
+            <QualitiesCard data={user.qualities} />
+            <MeetingsCard value={user.completedMeetings} />
+          </div>
+          <div className='col-md-8'>
+            <Comments />
+          </div>
+        </div>
       ) : (
         <Spinner />
       )}
@@ -41,6 +35,6 @@ const UserPage = ({ userId }) => {
   )
 }
 UserPage.propTypes = {
-  userId: PropTypes.string
+  userId: PropTypes.string.isRequired
 }
 export default UserPage
