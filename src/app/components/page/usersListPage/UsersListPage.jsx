@@ -29,7 +29,8 @@ const UsersListPage = () => {
   }, [])
 
   const handleDelete = (userId) => {
-    setUsers(users.filter((user) => user._id !== userId))
+    // setUsers(users.filter((user) => user._id !== userId))
+    console.log(userId)
   }
 
   const handleToggleBookmark = (userId) => {
@@ -39,7 +40,8 @@ const UsersListPage = () => {
       }
       return user
     })
-    setUsers(favUsers)
+    // setUsers(favUsers)
+    console.log(newArray)
   }
 
   useEffect(() => {
