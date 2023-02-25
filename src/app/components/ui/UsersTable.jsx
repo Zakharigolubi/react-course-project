@@ -30,7 +30,7 @@ const UsersTable = ({
     professions: {
       name: 'Профессия',
       component: (user) => {
-        return <Profession name={user.profession.name} />
+        return <Profession id={user.profession} />
       }
     },
     completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },
@@ -40,9 +40,8 @@ const UsersTable = ({
       name: 'Избранное',
       component: (user) => (
         <Bookmark
-          userId={user._id}
-          bookmark={user.bookmark}
-          onToggleBookmark={onToggleBookmark}
+          status={user.bookmark}
+          onClick={() => onToggleBookmark(user._id)}
         />
       )
     },

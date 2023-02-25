@@ -12,21 +12,16 @@ import { useParams } from 'react-router-dom'
 import UserPage from '../userPage/UserPage'
 import Spinner from '../../common/Spinner'
 import Search from '../../common/Search'
+import { useUser } from '../../../hooks/useUsers'
 
 const UsersListPage = () => {
+  const { users } = useUser()
   const [currentPage, setCurrentPage] = useState(1)
   const [professions, setProfessions] = useState()
   const [selectedProf, setSelectedProf] = useState()
-  const [loading, setLoading] = useState(true)
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
   const [search, setSearch] = useState('')
   const pageSize = 8
-
-  const [users, setUsers] = useState([])
-
-  useEffect(() => {
-    api.users.fetchAll().then((data) => setUsers(data))
-  }, [])
 
   const handleDelete = (userId) => {
     // setUsers(users.filter((user) => user._id !== userId))
@@ -46,7 +41,6 @@ const UsersListPage = () => {
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => {
-      setLoading(false)
       setProfessions(data)
     })
   }, [])
@@ -82,9 +76,7 @@ const UsersListPage = () => {
     : users
 
   const count = filteredUsers.length
-
   const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order])
-
   const userCrop = paginate(sortedUsers, currentPage, pageSize)
 
   const clearFilter = () => {
@@ -112,14 +104,14 @@ const UsersListPage = () => {
       )}
 
       <div className='d-flex flex-column'>
-        {loading ? (
+        {/* {loading ? (
           <Spinner />
-        ) : (
-          <>
-            <SearchStatus users={filteredUsers} />{' '}
-            <Search value={search} onChange={handleSearch} />
-          </>
-        )}
+        ) : ( */}
+        <>
+          <SearchStatus users={filteredUsers} />{' '}
+          <Search value={search} onChange={handleSearch} />
+        </>
+        {/* )} */}
 
         {count > 0 && (
           <UsersTable

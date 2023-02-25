@@ -4,10 +4,9 @@ import Users from './layouts/Users'
 import Navbar from '../app/components/ui/Navbar'
 import Main from './layouts/Main'
 import Login from './layouts/Login'
-import EditUserPage from './components/page/editUserPage/EditUserPage'
 import { ToastContainer } from 'react-toastify'
-import { ProfessionProvider } from './hooks/UseProfessions'
-import { QualityProvider } from './hooks/UseQualities'
+import { ProfessionProvider } from './hooks/useProfessions'
+import { QualityProvider } from './hooks/useQualities'
 
 const App = () => {
   return (
@@ -16,9 +15,7 @@ const App = () => {
       <ProfessionProvider>
         <QualityProvider>
           <Switch>
-            <Route path='/users/:userId/edit' component={EditUserPage} />
-            <Route path='/users/:userId?' component={Users} />
-            <Route path='/users' component={Users} />
+            <Route path='/users/:userId?/:edit?' component={Users} />
             <Route path='/login/:type?' component={Login} />
             <Route path='/' exact component={Main} />
             <Redirect to='/' />
