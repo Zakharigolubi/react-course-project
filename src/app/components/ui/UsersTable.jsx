@@ -55,7 +55,7 @@ const UsersTable = ({
   }
 
   return (
-    <div className='table-wrapper'>
+    <div>
       <Table
         onSort={onSort}
         selectedSort={selectedSort}

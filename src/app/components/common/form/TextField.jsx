@@ -19,24 +19,29 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
     <div className='mb-4'>
       <label htmlFor={name}>{label}</label>
       <div className='input-group has-validation'>
-        <input
-          type={showPassword ? 'text' : type}
-          id={name}
-          name={name}
-          value={value}
-          onChange={handleChange}
-          className={getInputClasses()}
-        />
-        {type === 'password' && (
-          <button
-            className='btn btn-outline-secondary'
-            type='button'
-            onClick={toggleShowPassword}
-          >
-            <i className={'bi bi-eye' + (showPassword ? '-slash' : '')}></i>
-          </button>
-        )}
-        {error && <div className='invalid-feedback'>{error}</div>}
+        <div className='w-100'>
+          <input
+            type={showPassword ? 'text' : type}
+            id={name}
+            name={name}
+            value={value}
+            onChange={handleChange}
+            className={getInputClasses()}
+          />
+
+          {type === 'password' && (
+            <i
+              className={
+                'password-visibility-icon bi bi-eye' +
+                (showPassword ? '-slash' : '')
+              }
+              style={{ right: error ? '35px' : '10px' }}
+              onClick={toggleShowPassword}
+            ></i>
+          )}
+
+          {error && <div className='invalid-feedback'>{error}</div>}
+        </div>
       </div>
     </div>
   )

@@ -12,6 +12,9 @@ code {
     monospace;
 }
 
-.table-wrapper {
-  height: 600px;
+.password-visibility-icon {
+  position: absolute;
+  top: 6.5px;
+  cursor: pointer;
+  z-index: 999;
 }

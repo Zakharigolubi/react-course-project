@@ -1,5 +1,5 @@
 import React from 'react'
-import { useProfessions } from '../../hooks/useProfessions'
+import { useProfessions } from '../../hooks/UseProfessions'
 import PropTypes from 'prop-types'
 
 const Profession = ({ id }) => {

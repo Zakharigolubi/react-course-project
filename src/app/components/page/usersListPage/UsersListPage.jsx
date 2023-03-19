@@ -10,9 +10,9 @@ import _ from 'lodash'
 import UsersTable from '../../ui/UsersTable'
 import { useParams } from 'react-router-dom'
 import UserPage from '../userPage/UserPage'
-import Spinner from '../../common/Spinner'
+// import Spinner from '../../common/Spinner'
 import Search from '../../common/Search'
-import { useUser } from '../../../hooks/useUsers'
+import { useUser } from '../../../hooks/UseUsers'
 
 const UsersListPage = () => {
   const { users } = useUser()
