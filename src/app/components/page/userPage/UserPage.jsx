@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import api from '../../../api'
 import Spinner from '../../common/Spinner'
 import UserCard from '../../ui/UserCard'
 import QualitiesCard from '../../ui/QualitiesCard'
 import MeetingsCard from '../../ui/MeetingsCard'
 import Comments from '../../ui/Comments'
+import { useUser } from '../../../hooks/UseUsers'
+import { CommentsProvider } from '../../../hooks/UseComments'
 
 const UserPage = ({ userId }) => {
-  const [user, setUser] = useState()
-  useEffect(() => {
-    api.users.getById(userId).then((data) => {
-      setUser(data)
-    })
-  }, [])
+  const { getUserById } = useUser()
+  const user = getUserById(userId)
 
   return (
     <div className='container'>
@@ -25,7 +22,9 @@ const UserPage = ({ userId }) => {
             <MeetingsCard value={user.completedMeetings} />
           </div>
           <div className='col-md-8'>
-            <Comments />
+            <CommentsProvider>
+              <Comments />
+            </CommentsProvider>
           </div>
         </div>
       ) : (

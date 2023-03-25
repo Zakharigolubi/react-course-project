@@ -8,6 +8,8 @@ import NavBar from './components/ui/Navbar'
 import { ProfessionProvider } from './hooks/UseProfessions'
 import { QualityProvider } from './hooks/UseQualities'
 import AuthProvider from './hooks/UseAuth'
+import ProtectedRoute from './components/common/ProtectedRoute'
+import LogOut from './layouts/LogOut'
 
 function App() {
   return (
@@ -18,8 +20,9 @@ function App() {
         <QualityProvider>
           <ProfessionProvider>
             <Switch>
-              <Route path='/users/:userId?/:edit?' component={Users} />
+              <ProtectedRoute path='/users/:userId?/:edit?' component={Users} />
               <Route path='/login/:type?' component={Login} />
+              <Route path='/logout' component={LogOut} />
               <Route path='/' exact component={Main} />
               <Redirect to='/' />
             </Switch>

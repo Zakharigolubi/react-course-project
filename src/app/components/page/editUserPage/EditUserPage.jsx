@@ -1,87 +1,92 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import api from '../../../api'
 import TextField from '../../common/form/TextField'
 import SelectField from '../../common/form/SelectField'
 import RadioField from '../../common/form/RadioField'
 import MultiSelectField from '../../common/form/MultiSelectField'
 import BackHistoryButton from '../../common/BackHistoryButton'
 import Spinner from '../../common/Spinner'
+import { useProfessions } from '../../../hooks/UseProfessions'
+import { useUser } from '../../../hooks/UseUsers'
+import { useQualities } from '../../../hooks/UseQualities'
+import { useAuth } from '../../../hooks/UseAuth'
+
+const getSelectOption = (obj) => {
+  return { value: obj?._id, label: obj?.name }
+}
 
 const EditUserPage = () => {
-  const [user, setUser] = useState()
-  const [professions, setProfessions] = useState([])
-  const [qualities, setQualities] = useState([])
   const params = useParams()
   const { userId } = params
+  const { updateUserData, currentUser: user } = useAuth()
+  const { professions } = useProfessions()
+  const [profSelectValue, setProfSelectValue] = useState(user.profession)
+  const { qualities, getQuality } = useQualities()
+
+  const [qualSelectValue, setQualSelectValue] = useState()
+  const [sex, setSex] = useState(user.sex)
+  const [name, setName] = useState(user.name)
+  const [email, setEmail] = useState(user.email)
+  const { isLoading: userLoading } = useUser()
+  const { isLoading: profLoading } = useProfessions()
+  const { isLoading: qualLoading } = useQualities()
+  const isLoading = userLoading || profLoading || qualLoading
   const history = useHistory()
 
+  const professionList = professions.map((prof) => {
+    return getSelectOption(prof)
+  })
+
+  const qualitiesList = qualities.map((qual) => {
+    return getSelectOption(qual)
+  })
   useEffect(() => {
-    api.users.getById(userId).then((data) => setUser(data))
-    api.professions.fetchAll().then((data) => {
-      const professionsList = Object.keys(data).map((professionName) => ({
-        label: data[professionName].name,
-        value: data[professionName]._id
-      }))
-      setProfessions(professionsList)
-    })
-    api.qualities.fetchAll().then((data) => {
-      const qualitiesList = Object.keys(data).map((optionName) => ({
-        label: data[optionName].name,
-        value: data[optionName]._id,
-        color: data[optionName].color
-      }))
-      setQualities(qualitiesList)
-    })
-  }, [])
-
-  const getProfessionById = (id) => {
-    for (const profession of professions) {
-      if (profession.value === id) {
-        return { _id: profession.value, name: profession.label }
-      }
+    if (qualities.length) {
+      const defaultQualities = user.qualities.map((id) => {
+        const quality = getQuality(id)
+        return getSelectOption(quality)
+      })
+      setQualSelectValue(defaultQualities)
     }
-  }
-
-  const getQualities = (elements) => {
-    const qualitiesArray = []
-    for (const element of elements) {
-      for (const quality in qualities) {
-        if (element.value === qualities[quality].value) {
-          qualitiesArray.push({
-            _id: qualities[quality].value,
-            name: qualities[quality].label,
-            color: qualities[quality].color
-          })
-        }
-      }
+  }, [qualities])
+  const handleChange = (el) => {
+    switch (el.name) {
+      case 'profession':
+        setProfSelectValue(el.value)
+        break
+      case 'qualities':
+        setQualSelectValue(el.value)
+        break
+      case 'sex':
+        setSex(el.value)
+        break
+      case 'name':
+        setName(el.value)
+        break
+      case 'email':
+        setEmail(el.value)
+        break
+      default:
+        break
     }
-    return qualitiesArray
-  }
-
-  const handleChange = (target) => {
-    setUser((prevState) => ({ ...prevState, [target.name]: target.value }))
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const userUpdated = {
       ...user,
-      profession: getProfessionById(user.profession),
-      qualities: getQualities(user.qualities)
+      profession: profSelectValue,
+      qualities: qualSelectValue.map((qual) => {
+        return qual.value
+      }),
+      sex,
+      name,
+      email
     }
-    api.users.update(userId, userUpdated)
+    updateUserData(userUpdated)
     history.push(`/users/${userId}`)
   }
-
-  const defaultQualities = () => {
-    return user.qualities.map((item) => ({
-      label: item.name,
-      value: item._id
-    }))
-  }
-
-  return user ? (
+  return !isLoading && user ? (
     <div className='container mt-5'>
       <BackHistoryButton />
       <div className='row'>
@@ -90,21 +95,21 @@ const EditUserPage = () => {
             <TextField
               label='Имя'
               name='name'
-              value={user.name}
+              value={name}
               onChange={handleChange}
             />
             <TextField
               label='Электронная почта'
               name='email'
-              value={user.email}
+              value={email}
               onChange={handleChange}
             />
             <SelectField
               label='Выбрать профессию'
               defaultOption='Select'
               name='profession'
-              options={professions}
-              value={user.profession._id}
+              options={professionList}
+              value={profSelectValue}
               onChange={handleChange}
             />
             <RadioField
@@ -115,16 +120,18 @@ const EditUserPage = () => {
                 { name: 'Female', value: 'female' },
                 { name: 'Other', value: 'other' }
               ]}
-              value={user.sex}
+              value={sex}
               onChange={handleChange}
             />
-            <MultiSelectField
-              label='Выберите ваши качества'
-              name='qualities'
-              options={qualities}
-              defaultValue={defaultQualities()}
-              onChange={handleChange}
-            />
+            {qualSelectValue && (
+              <MultiSelectField
+                label='Выберите ваши качества'
+                name='qualities'
+                options={qualitiesList}
+                defaultValue={qualSelectValue}
+                onChange={handleChange}
+              />
+            )}
             <button className='btn btn-primary w-100 mx-auto' type='submit'>
               Обновить
             </button>
