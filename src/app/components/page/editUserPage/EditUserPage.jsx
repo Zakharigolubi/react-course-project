@@ -6,44 +6,65 @@ import RadioField from '../../common/form/RadioField'
 import MultiSelectField from '../../common/form/MultiSelectField'
 import BackHistoryButton from '../../common/BackHistoryButton'
 import Spinner from '../../common/Spinner'
-import { useProfessions } from '../../../hooks/UseProfessions'
 import { useUser } from '../../../hooks/UseUsers'
-import { useQualities } from '../../../hooks/UseQualities'
 import { useAuth } from '../../../hooks/UseAuth'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  getQualities,
+  getQualitiesLoadingStatus
+} from '../../../store/Qualities'
+import {
+  getProfessions,
+  getProfessionsLoadingStatus,
+  loadProfessionsList
+} from '../../../store/Professions'
 
 const getSelectOption = (obj) => {
   return { value: obj?._id, label: obj?.name }
 }
 
 const EditUserPage = () => {
+  const dispatch = useDispatch()
+
   const params = useParams()
   const { userId } = params
   const { updateUserData, currentUser: user } = useAuth()
-  const { professions } = useProfessions()
+
+  const professions = useSelector(getProfessions())
+  const professionsLoading = useSelector(getProfessionsLoadingStatus())
   const [profSelectValue, setProfSelectValue] = useState(user.profession)
-  const { qualities, getQuality } = useQualities()
+
+  const qualities = useSelector(getQualities())
+  const qualitiesLoading = useSelector(getQualitiesLoadingStatus())
+  function getQuality(id) {
+    return qualities.find((qual) => qual._id === id)
+  }
 
   const [qualSelectValue, setQualSelectValue] = useState()
   const [sex, setSex] = useState(user.sex)
   const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
   const { isLoading: userLoading } = useUser()
-  const { isLoading: profLoading } = useProfessions()
-  const { isLoading: qualLoading } = useQualities()
-  const isLoading = userLoading || profLoading || qualLoading
+
+  const isLoading = userLoading || professionsLoading || qualitiesLoading
   const history = useHistory()
 
-  const professionList = professions.map((prof) => {
+  const professionList = professions?.map((prof) => {
     return getSelectOption(prof)
   })
 
   const qualitiesList = qualities.map((qual) => {
     return getSelectOption(qual)
   })
+
+  useEffect(() => {
+    dispatch(loadProfessionsList())
+  }, [])
   useEffect(() => {
     if (qualities.length) {
       const defaultQualities = user.qualities.map((id) => {
         const quality = getQuality(id)
+
         return getSelectOption(quality)
       })
       setQualSelectValue(defaultQualities)

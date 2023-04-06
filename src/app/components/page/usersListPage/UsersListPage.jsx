@@ -12,13 +12,22 @@ import UserPage from '../userPage/UserPage'
 // import Spinner from '../../common/Spinner'
 import Search from '../../common/Search'
 import { useUser } from '../../../hooks/UseUsers'
-import { useProfessions } from '../../../hooks/UseProfessions'
 import { useAuth } from '../../../hooks/UseAuth'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  getProfessions,
+  getProfessionsLoadingStatus,
+  loadProfessionsList
+} from '../../../store/Professions'
 
 const UsersListPage = () => {
+  const dispatch = useDispatch()
   const { users } = useUser()
   const { currentUser } = useAuth()
-  const { isLoading: professionsLoading, professions } = useProfessions()
+
+  const professions = useSelector(getProfessions())
+  const professionsLoading = useSelector(getProfessionsLoadingStatus())
+
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedProf, setSelectedProf] = useState()
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' })
@@ -40,6 +49,10 @@ const UsersListPage = () => {
     // setUsers(favUsers)
     console.log(favUsers)
   }
+
+  useEffect(() => {
+    dispatch(loadProfessionsList())
+  })
 
   useEffect(() => {
     setCurrentPage(1)
