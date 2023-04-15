@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { getCurrentUserData } from '../../store/Users'
+import Spinner from '../common/Spinner'
 
 const NavProfile = () => {
   const currentUser = useSelector(getCurrentUserData())
@@ -11,7 +12,7 @@ const NavProfile = () => {
     setOpen((prevState) => !prevState)
   }
 
-  if (!currentUser) return 'Loading...'
+  if (!currentUser) return <Spinner />
   return (
     <div className='dropdown' onClick={toggleMenu}>
       <div className='btn dropdown-toggle d-flex align-items-center'>

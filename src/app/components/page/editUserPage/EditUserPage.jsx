@@ -28,7 +28,9 @@ const EditUserPage = () => {
   const currentUser = useSelector(getCurrentUserData())
   const professions = useSelector(getProfessions())
   const professionsLoading = useSelector(getProfessionsLoadingStatus())
-  const [profSelectValue, setProfSelectValue] = useState(currentUser.profession)
+  const [profSelectValue, setProfSelectValue] = useState(
+    currentUser?.profession
+  )
   const qualities = useSelector(getQualities())
   const qualitiesLoading = useSelector(getQualitiesLoadingStatus())
   function getQuality(id) {

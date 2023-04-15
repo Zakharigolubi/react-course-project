@@ -1,4 +1,3 @@
-/* eslint-disable */
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import configFile from '../config.json'

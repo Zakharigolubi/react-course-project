@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import userService from '../services/user.service'
 import { toast } from 'react-toastify'
 import { useAuth } from './UseAuth'
+import Spinner from '../components/common/Spinner'
 
 const UserContext = React.createContext()
 
@@ -44,7 +45,7 @@ const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider value={{ users, getUserById }}>
-      {!isLoading ? children : 'Loading...'}
+      {!isLoading ? children : <Spinner />}
     </UserContext.Provider>
   )
 }

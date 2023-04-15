@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import { paginate } from '../../../utils/paginate'
 import Pagination from '../../common/Pagination'
@@ -9,14 +8,18 @@ import _ from 'lodash'
 import UsersTable from '../../ui/UsersTable'
 import { useParams } from 'react-router-dom'
 import UserPage from '../userPage/UserPage'
-// import Spinner from '../../common/Spinner'
+import Spinner from '../../common/Spinner'
 import Search from '../../common/Search'
 import { useSelector } from 'react-redux'
 import {
   getProfessions,
   getProfessionsLoadingStatus
 } from '../../../store/Professions'
-import { getCurrentUserId, getUsers } from '../../../store/Users'
+import {
+  getCurrentUserId,
+  getUsers,
+  getUsersLoadingStatus
+} from '../../../store/Users'
 
 const UsersListPage = () => {
   const users = useSelector(getUsers())
@@ -32,21 +35,7 @@ const UsersListPage = () => {
   const [search, setSearch] = useState('')
   const pageSize = 8
 
-  const handleDelete = (userId) => {
-    // setUsers(users.filter((user) => user._id !== userId))
-    console.log(userId)
-  }
-
-  const handleToggleBookmark = (userId) => {
-    const favUsers = users.map((user) => {
-      if (user._id === userId) {
-        user.bookmark = !user.bookmark
-      }
-      return user
-    })
-    // setUsers(favUsers)
-    console.log(favUsers)
-  }
+  const loading = useSelector(getUsersLoadingStatus())
 
   useEffect(() => {
     setCurrentPage(1)
@@ -72,13 +61,13 @@ const UsersListPage = () => {
 
   function filterUsers(data) {
     const filteredUsers = selectedProf
-      ? data.filter((user) => _.isEqual(user.profession, selectedProf))
+      ? data.filter((user) => user.profession === selectedProf._id)
       : search
       ? users.filter((user) =>
           user.name.toLowerCase().includes(search.toLowerCase())
         )
       : data
-    return filteredUsers.filter((user) => user._id != currentUserId)
+    return filteredUsers.filter((user) => user._id !== currentUserId)
   }
   const filteredUsers = filterUsers(users || [])
   const count = filteredUsers.length
@@ -110,20 +99,18 @@ const UsersListPage = () => {
       )}
 
       <div className='d-flex flex-column'>
-        {/* {loading ? (
+        {loading ? (
           <Spinner />
-        ) : ( */}
-        <>
-          <SearchStatus users={filteredUsers} />{' '}
-          <Search value={search} onChange={handleSearch} />
-        </>
-        {/* )} */}
+        ) : (
+          <>
+            <SearchStatus users={filteredUsers} />{' '}
+            <Search value={search} onChange={handleSearch} />
+          </>
+        )}
 
         {count > 0 && (
           <UsersTable
             users={userCrop}
-            onDelete={handleDelete}
-            onToggleBookmark={handleToggleBookmark}
             onSort={handleSort}
             selectedSort={sortBy}
           />

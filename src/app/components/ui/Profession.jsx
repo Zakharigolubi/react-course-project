@@ -5,6 +5,7 @@ import {
   getProfessionById,
   getProfessionsLoadingStatus
 } from '../../store/Professions'
+import Spinner from '../common/Spinner'
 
 const Profession = ({ id }) => {
   const professionsLoading = useSelector(getProfessionsLoadingStatus())
@@ -12,7 +13,7 @@ const Profession = ({ id }) => {
 
   if (!professionsLoading) {
     return <p>{prof.name}</p>
-  } else return 'loading...'
+  } else return <Spinner />
 }
 Profession.propTypes = {
   id: PropTypes.string

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react'
 import Select from 'react-select'
 import PropTypes from 'prop-types'
@@ -10,7 +9,7 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
       : options
 
   const handleChange = (value) => {
-    onChange({ name: name, value })
+    onChange({ name, value })
   }
 
   return (

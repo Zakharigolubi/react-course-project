@@ -7,6 +7,7 @@ import {
   getQualitiesLoadingStatus,
   loadQualitiesList
 } from '../../../store/Qualities'
+import Spinner from '../../common/Spinner'
 
 const QualitiesList = ({ qualities }) => {
   const dispatch = useDispatch()
@@ -17,7 +18,7 @@ const QualitiesList = ({ qualities }) => {
     dispatch(loadQualitiesList())
   }, [])
 
-  if (qualitiesLoading) return 'Loading...'
+  if (qualitiesLoading) return <Spinner />
   return (
     <>
       {qualitiesList.map((qual) => (
