@@ -13,7 +13,7 @@ const professionsSlice = createSlice({
     professionsRequested: (state) => {
       state.isLoading = true
     },
-    professionsReceved: (state, action) => {
+    professionsReceived: (state, action) => {
       state.entities = action.payload
       state.lastFetch = Date.now()
       state.isLoading = false

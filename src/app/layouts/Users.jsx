@@ -3,14 +3,15 @@ import { useParams } from 'react-router-dom'
 import EditUserPage from '../components/page/editUserPage/EditUserPage'
 import UserPage from '../components/page/userPage/UserPage'
 import UsersListPage from '../components/page/usersListPage/UsersListPage'
-import UserProvider from '../hooks/UseUsers'
+import UsersLoader from '../components/ui/hoc/UsersLoader'
 
 const Users = () => {
   const params = useParams()
   const { userId, edit } = params
+
   return (
     <>
-      <UserProvider>
+      <UsersLoader>
         {userId ? (
           edit ? (
             <EditUserPage />
@@ -20,7 +21,7 @@ const Users = () => {
         ) : (
           <UsersListPage />
         )}
-      </UserProvider>
+      </UsersLoader>
     </>
   )
 }

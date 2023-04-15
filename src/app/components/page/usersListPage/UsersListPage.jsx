@@ -11,19 +11,17 @@ import { useParams } from 'react-router-dom'
 import UserPage from '../userPage/UserPage'
 // import Spinner from '../../common/Spinner'
 import Search from '../../common/Search'
-import { useUser } from '../../../hooks/UseUsers'
-import { useAuth } from '../../../hooks/UseAuth'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import {
   getProfessions,
-  getProfessionsLoadingStatus,
-  loadProfessionsList
+  getProfessionsLoadingStatus
 } from '../../../store/Professions'
+import { getCurrentUserId, getUsers } from '../../../store/Users'
 
 const UsersListPage = () => {
-  const dispatch = useDispatch()
-  const { users } = useUser()
-  const { currentUser } = useAuth()
+  const users = useSelector(getUsers())
+
+  const currentUserId = useSelector(getCurrentUserId())
 
   const professions = useSelector(getProfessions())
   const professionsLoading = useSelector(getProfessionsLoadingStatus())
@@ -49,10 +47,6 @@ const UsersListPage = () => {
     // setUsers(favUsers)
     console.log(favUsers)
   }
-
-  useEffect(() => {
-    dispatch(loadProfessionsList())
-  })
 
   useEffect(() => {
     setCurrentPage(1)
@@ -84,9 +78,9 @@ const UsersListPage = () => {
           user.name.toLowerCase().includes(search.toLowerCase())
         )
       : data
-    return filteredUsers.filter((user) => user._id != currentUser._id)
+    return filteredUsers.filter((user) => user._id != currentUserId)
   }
-  const filteredUsers = filterUsers(users)
+  const filteredUsers = filterUsers(users || [])
   const count = filteredUsers.length
   const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order])
   const userCrop = paginate(sortedUsers, currentPage, pageSize)

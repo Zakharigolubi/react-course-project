@@ -110,6 +110,7 @@ const AuthProvider = ({ children }) => {
   async function updateUserData(data) {
     try {
       await userService.updateUser(data)
+      console.log(data)
       setUser(data)
     } catch (error) {
       errorCatcher(error)
@@ -131,7 +132,7 @@ const AuthProvider = ({ children }) => {
     }
   }
   useEffect(() => {
-    if (localStorageService.getAccesToken()) {
+    if (localStorageService.getAccessToken()) {
       getUserData()
     } else {
       setLoading(false)

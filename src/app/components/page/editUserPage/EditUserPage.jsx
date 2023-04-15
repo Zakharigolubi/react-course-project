@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
 import TextField from '../../common/form/TextField'
 import SelectField from '../../common/form/SelectField'
 import RadioField from '../../common/form/RadioField'
 import MultiSelectField from '../../common/form/MultiSelectField'
 import BackHistoryButton from '../../common/BackHistoryButton'
 import Spinner from '../../common/Spinner'
-import { useUser } from '../../../hooks/UseUsers'
-import { useAuth } from '../../../hooks/UseAuth'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getQualities,
@@ -15,25 +12,23 @@ import {
 } from '../../../store/Qualities'
 import {
   getProfessions,
-  getProfessionsLoadingStatus,
-  loadProfessionsList
+  getProfessionsLoadingStatus
 } from '../../../store/Professions'
+import {
+  getCurrentUserData,
+  getUsersLoadingStatus,
+  updateUserData
+} from '../../../store/Users'
 
 const getSelectOption = (obj) => {
   return { value: obj?._id, label: obj?.name }
 }
 
 const EditUserPage = () => {
-  const dispatch = useDispatch()
-
-  const params = useParams()
-  const { userId } = params
-  const { updateUserData, currentUser: user } = useAuth()
-
+  const currentUser = useSelector(getCurrentUserData())
   const professions = useSelector(getProfessions())
   const professionsLoading = useSelector(getProfessionsLoadingStatus())
-  const [profSelectValue, setProfSelectValue] = useState(user.profession)
-
+  const [profSelectValue, setProfSelectValue] = useState(currentUser.profession)
   const qualities = useSelector(getQualities())
   const qualitiesLoading = useSelector(getQualitiesLoadingStatus())
   function getQuality(id) {
@@ -41,14 +36,15 @@ const EditUserPage = () => {
   }
 
   const [qualSelectValue, setQualSelectValue] = useState()
-  const [sex, setSex] = useState(user.sex)
-  const [name, setName] = useState(user.name)
-  const [email, setEmail] = useState(user.email)
-  const { isLoading: userLoading } = useUser()
+  const [sex, setSex] = useState(currentUser.sex)
+  const [name, setName] = useState(currentUser.name)
+  const [email, setEmail] = useState(currentUser.email)
+
+  const userLoading = useSelector(getUsersLoadingStatus())
 
   const isLoading = userLoading || professionsLoading || qualitiesLoading
-  const history = useHistory()
 
+  const dispatch = useDispatch()
   const professionList = professions?.map((prof) => {
     return getSelectOption(prof)
   })
@@ -58,11 +54,8 @@ const EditUserPage = () => {
   })
 
   useEffect(() => {
-    dispatch(loadProfessionsList())
-  }, [])
-  useEffect(() => {
     if (qualities.length) {
-      const defaultQualities = user.qualities.map((id) => {
+      const defaultQualities = currentUser.qualities.map((id) => {
         const quality = getQuality(id)
 
         return getSelectOption(quality)
@@ -95,7 +88,7 @@ const EditUserPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     const userUpdated = {
-      ...user,
+      ...currentUser,
       profession: profSelectValue,
       qualities: qualSelectValue.map((qual) => {
         return qual.value
@@ -104,10 +97,9 @@ const EditUserPage = () => {
       name,
       email
     }
-    updateUserData(userUpdated)
-    history.push(`/users/${userId}`)
+    dispatch(updateUserData(userUpdated))
   }
-  return !isLoading && user ? (
+  return !isLoading && currentUser ? (
     <div className='container mt-5'>
       <BackHistoryButton />
       <div className='row'>
